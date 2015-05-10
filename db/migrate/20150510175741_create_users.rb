@@ -6,5 +6,8 @@ class CreateUsers < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    change_table :users do |t|
+      t.integer :profile_id
+    end
   end
 end
