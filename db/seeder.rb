@@ -1,7 +1,8 @@
 Faker::Config.locale = 'en-US'
 
-def fake_user
-  { name: Faker::Name.name, email: Faker::Internet.email }
+def fake_user(join_date, up_date)
+  { name: Faker::Name.name, email: Faker::Internet.email,
+    created_at: join_date, updated_at: up_date }
 end
 
 def fake_product
@@ -38,7 +39,7 @@ def create_profile(user: user)
   cc = CreditCard.create fake_credit_card(user_profile_id: new_profile.id, name: user.name)
   new_profile.update(cc_id: cc.id)
 
-  join_date = Faker::Time.between(user.created_at, Time.now)
+  join_date = Time.now
   new_profile.update(created_at: join_date)
   new_profile.update(updated_at: join_date)
 
@@ -52,7 +53,9 @@ end
 
 def create_users(amount)
   amount.times do
-    User.create fake_user
+    join_date = Faker::Time.between(1.years.ago, Time.now)
+    up_date = Faker::Time.between(join_date, Time.now) # im so clever
+    User.create fake_user(join_date, up_date)
   end
 end
 
