@@ -39,14 +39,8 @@ def create_profile(user: user)
   cc = CreditCard.create fake_credit_card(user_profile_id: new_profile.id, name: user.name)
   new_profile.update(cc_id: cc.id)
 
-  join_date = Time.now
-  new_profile.update(created_at: join_date)
-  new_profile.update(updated_at: join_date)
-
   cart = Order.create(
     user_id: new_profile.id, in_cart: true,
-    created_at: join_date,
-    updated_at: join_date
   )
   new_profile.update(cart_id: cart.id)
 end
@@ -54,7 +48,8 @@ end
 def create_users(amount)
   amount.times do
     join_date = Faker::Time.between(1.years.ago, Time.now)
-    up_date = Faker::Time.between(join_date, Time.now) # im so clever
+    # defined globally as $dinner_with_my_man_on_a_g5
+    up_date = Faker::Time.between(join_date, Time.now)
     User.create fake_user(join_date, up_date)
   end
 end
@@ -94,13 +89,14 @@ end
 def create_orders_over_time(amount)
   amount.times do
     profile = UserProfile.all.sample
-    order_time = Faker::Time.between(profile.created_at, Time.now)
+    created = Faker::Time.between(1.years.ago, Time.now)
+    updated = Faker::Time.between(created, Time.now)
     Order.create(
       user_id: profile.id,
       shipping_address_id: profile.shipping_address_id,
       billing_address_id: profile.billing_address_id,
       cc_id: profile.cc_id, in_cart: false,
-      created_at: order_time, updated_at: order_time
+      created_at: created, updated_at: updated
     )
     add_products(order_id: Order.last.id)
   end

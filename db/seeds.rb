@@ -9,7 +9,7 @@ Address.delete_all
 OrderProduct.delete_all
 CreditCard.delete_all
 
-multiplier = 2
+multiplier = 1
 
 create_users(100 * multiplier)
 create_profiles(50 * multiplier)
