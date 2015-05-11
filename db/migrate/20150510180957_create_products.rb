@@ -4,14 +4,10 @@ class CreateProducts < ActiveRecord::Migration
       t.string :title
       t.text :description
       t.decimal :price
-      t.integer :sku
+      t.string :sku
       t.integer :category_id
 
       t.timestamps null: false
-    end
-    change_table :product do |t|
-      t.remove :sku
-      t.string :sku
     end
   end
 end

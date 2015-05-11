@@ -3,11 +3,9 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.string :name
       t.string :email
+      t.integer :profile_id
 
       t.timestamps null: false
-    end
-    change_table :users do |t|
-      t.integer :profile_id
     end
   end
 end

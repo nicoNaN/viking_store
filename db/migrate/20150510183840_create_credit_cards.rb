@@ -5,7 +5,7 @@ class CreateCreditCards < ActiveRecord::Migration
       t.datetime :exp_date
       t.string :card_number
       t.integer :csc
-      t.integer :user_profile_id
+      t.integer :profile_id
 
       t.timestamps null: false
     end

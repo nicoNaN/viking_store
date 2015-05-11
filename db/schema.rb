@@ -29,9 +29,9 @@ ActiveRecord::Schema.define(version: 20150510183840) do
     t.datetime "exp_date"
     t.string   "card_number"
     t.integer  "csc"
-    t.integer  "user_profile_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "profile_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "order_products", force: :cascade do |t|
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20150510183840) do
     t.string   "title"
     t.text     "description"
     t.decimal  "price"
-    t.integer  "sku"
+    t.string   "sku"
     t.integer  "category_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -71,15 +71,18 @@ ActiveRecord::Schema.define(version: 20150510183840) do
 
   create_table "user_profiles", force: :cascade do |t|
     t.string   "phone_number"
+    t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
     t.integer  "cc_id"
     t.integer  "cart_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
+    t.string   "email"
+    t.integer  "profile_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

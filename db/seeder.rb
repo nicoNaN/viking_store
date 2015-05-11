@@ -59,7 +59,7 @@ end
 def create_profiles(amount)
   User.all.sample(amount).each do |user|
     create_profile(user: user)
-    user.update(user_id: UserProfile.last.id)
+    user.update(profile_id: UserProfile.last.id)
   end
 end
 
@@ -67,6 +67,12 @@ def create_additional_addresses(amount)
   amount.times do
     profile = UserProfile.all.sample
     Address.create fake_address(profile_id: profile.id)
+  end
+end
+
+def shuffle_addresses(amount)
+  UserProfile.all.sample(amount).each do |user|
+    user.update(billing_address_id: Address.all.sample.id)
   end
 end
 
@@ -109,7 +115,7 @@ end
 
 def populate_carts(amount)
   amount.times do
-    profile = UserProfile.sample
+    profile = UserProfile.all.sample
     cart_id = profile.cart_id
     add_products(order_id: cart_id)
   end
