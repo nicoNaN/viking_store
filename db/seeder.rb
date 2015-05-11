@@ -40,7 +40,7 @@ def create_profile(user: user)
   new_profile.update(cc_id: cc.id)
 
   cart = Order.create(
-    user_id: new_profile.id, in_cart: true,
+    user_id: new_profile.id, in_cart: true
   )
   new_profile.update(cart_id: cart.id)
 end
