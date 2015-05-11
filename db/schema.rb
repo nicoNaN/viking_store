@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20150510183840) do
   create_table "products", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
-    t.decimal  "price"
+    t.float    "price"
     t.string   "sku"
     t.integer  "category_id"
     t.datetime "created_at",  null: false
