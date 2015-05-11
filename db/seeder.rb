@@ -1,6 +1,6 @@
-Faker::Config.locale = 'en-US'
+Faker::Config.locale = 'en-US' # gives us US-valid phone nums and addresses
 
-def fake_user(join_date, up_date)
+def fake_user(join_date, up_date) # params present for randomizing dates
   { name: Faker::Name.name, email: Faker::Internet.email,
     created_at: join_date, updated_at: up_date }
 end
@@ -15,12 +15,13 @@ def fake_product_category
   { title: Faker::Commerce.department, description: Faker::Lorem.sentence }
 end
 
-def fake_address(profile_id: profile_id)
+def fake_address(profile_id: profile_id) # profile_id passed to connect to user
   { profile_id: profile_id, line_1: Faker::Address.street_address,
     line_2: Faker::Address.secondary_address, city: Faker::Address.city,
     state: Faker::Address.state_abbr, zip: Faker::Address.zip_code }
 end
 
+# id, name passed to connect cc with existing user
 def fake_credit_card(user_profile_id: user_profile_id, name: name)
   { profile_id: user_profile_id, name_on_card: name,
     exp_date: Faker::Date.between(Date.today, 2.years.from_now),
@@ -30,8 +31,10 @@ end
 def create_profile(user: user)
   new_profile = UserProfile.create
 
+  # phone num generation happens here b/c no model is necessary
   new_profile.update(phone_number: Faker::PhoneNumber.phone_number)
 
+  # billing and shipping default to the same
   ad = Address.create fake_address(profile_id: new_profile.id)
   new_profile.update(shipping_address_id: ad.id)
   new_profile.update(billing_address_id: ad.id)
@@ -39,6 +42,7 @@ def create_profile(user: user)
   cc = CreditCard.create fake_credit_card(user_profile_id: new_profile.id, name: user.name)
   new_profile.update(cc_id: cc.id)
 
+  # created_at and updated_at default to now for non-orders
   cart = Order.create(
     user_id: new_profile.id, in_cart: true
   )
@@ -61,6 +65,7 @@ def create_profiles(amount)
   end
 end
 
+# gives random users multiple addresses
 def create_additional_addresses(amount)
   amount.times do
     profile = UserProfile.all.sample
@@ -68,7 +73,8 @@ def create_additional_addresses(amount)
   end
 end
 
-def shuffle_addresses(amount)
+# randomly changes some users billing address
+def shuffle_billing_address(amount)
   UserProfile.all.sample(amount).each do |user|
     user.update(billing_address_id: Address.all.sample.id)
   end
@@ -86,6 +92,7 @@ def create_products(amount)
   end
 end
 
+# creates orders that have been processed w/ random dates for analysis
 def create_orders_over_time(amount)
   amount.times do
     profile = UserProfile.all.sample
